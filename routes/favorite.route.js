@@ -16,6 +16,7 @@ router.post('/', [
     validateJWT,
     check('url', 'Url is required').notEmpty(),
     check('name', 'Name is required').notEmpty(),
+    check('createdAt', 'createdAt is required').notEmpty(),
     validateFields
 ], createFavorite)
 

@@ -9,12 +9,19 @@ const Favorite = Schema({
         type: String,
         require: [true, 'Categorie is required']
     },
+    description: {
+        type: String,
+    },
+    createdAt: {
+        type: String,
+        require: [true, 'Categorie is required']
+    },
     user: {
         type: Schema.Types.ObjectId,
         ref: 'User',
         require: true
     }
-}) 
+})
 
 Favorite.methods.toJSON = function () {
     const { __v, user, state, ...favorite } = this.toObject();

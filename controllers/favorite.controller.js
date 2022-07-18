@@ -2,8 +2,8 @@ const { Favorite } = require("../models");
 
 const getFavorite = async (req, res) => {
 
-    const { user } = req.body;
-    const query = { user };
+    const user = req.user;
+    const query = { user: user._id };
 
     const favorites = await Favorite.find(query);
 
@@ -14,11 +14,11 @@ const getFavorite = async (req, res) => {
 
 const createFavorite = async (req, res) => {
 
-    const { url, name, user } = req.body;
+    const { url, name, ...remains } = req.body;
+    const user = req.user;
     const query = { url };
 
     const favoriteFromDB = await Favorite.findOne(query);
-    console.log("heyyy", favoriteFromDB);
 
     if (favoriteFromDB) {
         return res.status(400).json({
@@ -29,7 +29,8 @@ const createFavorite = async (req, res) => {
     const inputFavorite = {
         name,
         url,
-        user,
+        user: user._id,
+        ...remains
     }
 
     const newFavorite = new Favorite(inputFavorite);
