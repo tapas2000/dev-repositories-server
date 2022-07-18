@@ -15,7 +15,7 @@ class Server {
         //connect to bd
         this.connectDb();
         //middlewares        
-        // this.middlewares();
+        this.middlewares();
         //Read and parse of body
         this.app.use(express.json());
         //routes
@@ -37,7 +37,7 @@ class Server {
         this.app.use(express.static('public'))
     }
     startlistening() {
-        console.error("-----------",process.env.PORT);
+        console.error("-----------", process.env.PORT);
 
         this.app.listen(8080, () => {
             console.log("App listening...");
