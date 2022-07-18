@@ -1,4 +1,4 @@
-const { User } = require("../models");
+const { User, Favorite } = require("../models");
 
 const emailExist = async (inputEmail) => {
     // Validate if email already exist
@@ -9,7 +9,17 @@ const emailExist = async (inputEmail) => {
     }
 }
 
+const favoriteExistById = async (id) => {
+
+    const searchedFavorite = await Favorite.findById(id);
+
+    if (!searchedFavorite) {
+        throw new Error(`Id ${id} doesn't exist`)
+    }
+}
+
 
 module.exports = {
     emailExist,
+    favoriteExistById
 }

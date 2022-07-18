@@ -8,7 +8,7 @@ class Server {
 
         this.paths = {
             auth: '/api/auth',
-            repository: '/api/categories',
+            favorite: '/api/favorite',
         }
         this.app = express();
 
@@ -27,6 +27,7 @@ class Server {
     routes() {
 
         this.app.use(this.paths.auth, require('../routes/auth.route'))
+        this.app.use(this.paths.favorite, require('../routes/favorite.route'))
     }
     middlewares() {
 

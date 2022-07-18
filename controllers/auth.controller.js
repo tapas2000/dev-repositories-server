@@ -1,5 +1,5 @@
 const bcryptjs = require("bcryptjs/dist/bcrypt");
-// const { generateJWT } = require("../helpers/generate-jwt");
+const { generateJWT } = require("../helpers/generate-jwt");
 const User = require("../models/user.model");
 
 const login = async (req, res) => {
@@ -15,15 +15,9 @@ const login = async (req, res) => {
             })
         }
 
-        if (!searchedUser.state) {
-            return res.status(400).json({
-                msg: 'This user no longer is available',
-            })
-        }
+        const isValidPassword = bcryptjs.compareSync(password, searchedUser.password);
 
-        const validPassword = bcryptjs.compareSync(password, searchedUser.password);
-
-        if (!validPassword) {
+        if (!isValidPassword) {
             return res.status(400).json({
                 msg: 'Email / Password incorrect',
             })
@@ -45,7 +39,28 @@ const login = async (req, res) => {
 }
 
 const sigin = async (req, res) => {
+    const { name, nickname, email, password } = req.body;
+    const user = new User({ name, email, password, nickname });
 
+    const isUnique = await User.findOne({ email });
+    if (isUnique) {
+        return res.status(400).json({
+            ok: false,
+            msg: "This email already exist",
+        })
+    }
+
+     // Encrypt password
+     const salt = bcryptjs.genSaltSync();
+     user.password = bcryptjs.hashSync(password, salt);
+ 
+     await user.save();
+ 
+     res.status(201).json({
+         ok: true,
+         msg: "User created succesfully",
+         user
+     })
 }
 
 module.exports = {
